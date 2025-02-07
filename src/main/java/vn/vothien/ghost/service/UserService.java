@@ -17,18 +17,6 @@ public class UserService {
 
     // handle create user
     public User handleCreateUser(User user) {
-        // // check company
-        // if (user.getCompany() != null) {
-        // Optional<Company> companyOptional =
-        // this.companyService.findById(user.getCompany().getId());
-        // user.setCompany(companyOptional.isPresent() ? companyOptional.get() : null);
-        // }
-
-        // // check role
-        // if (user.getRole() != null) {
-        // Role r = this.roleService.fetchRoleById(user.getRole().getId());
-        // user.setRole(r != null ? r : null);
-        // }
         return this.userRepository.save(user);
     }
 
@@ -47,21 +35,6 @@ public class UserService {
         if (currentUser != null) {
             currentUser.setAddress(reqUser.getAddress());
             currentUser.setGender(reqUser.getGender());
-
-            // check company
-            // if (reqUser.getCompany() != null) {
-            // Optional<Company> companyOptional =
-            // this.companyService.findById(reqUser.getCompany().getId());
-            // currentUser.setCompany(companyOptional.isPresent() ? companyOptional.get() :
-            // null);
-            // }
-
-            // check role
-            // if (reqUser.getRole() != null) {
-            // Role r = this.roleService.fetchRoleById(reqUser.getRole().getId());
-            // currentUser.setRole(r != null ? r : null);
-            // }
-
             // update
             currentUser = this.userRepository.save(currentUser);
         }

@@ -1,5 +1,6 @@
 package vn.vothien.ghost.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -13,6 +14,11 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    // get all user
+    public List<User> fetchAllUser() {
+        return this.userRepository.findAll();
     }
 
     // handle create user

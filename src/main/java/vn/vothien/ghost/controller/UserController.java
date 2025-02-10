@@ -1,5 +1,7 @@
 package vn.vothien.ghost.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,9 +28,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    // get all user
+    @GetMapping("users")
+    public ResponseEntity<List<User>> getAllUser() {
+        List<User> fetchUser = this.userService.fetchAllUser();
+        return ResponseEntity.status(HttpStatus.OK).body(fetchUser);
+    }
+
     // get user by id
     @GetMapping("users/{id}")
-
     public ResponseEntity<User> getUserById(@PathVariable("id") long id, String email) {
         User fetchUser = this.userService.fetchUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(fetchUser);
@@ -50,7 +58,6 @@ public class UserController {
     }
 
     // put user
-
     @PutMapping("/users")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) throws IdInvalidException {
         User ghostUser = this.userService.handleUpdateUser(user);

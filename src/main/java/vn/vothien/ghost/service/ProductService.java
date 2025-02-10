@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import vn.vothien.ghost.domain.Product;
 import vn.vothien.ghost.repository.ProductRepository;
-import vn.vothien.ghost.repository.ProductRepository;
 
 @Service
 public class ProductService {
@@ -37,7 +36,7 @@ public class ProductService {
             currentProduct.setNameProduct(reqProduct.getNameProduct());
             currentProduct.setNameAuthor(reqProduct.getNameAuthor());
             currentProduct.setDescription(reqProduct.getDescription());
-            
+
             // update
             currentProduct = this.productRepository.save(currentProduct);
         }

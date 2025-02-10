@@ -2,6 +2,8 @@ package vn.vothien.ghost.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import vn.vothien.ghost.domain.User;
+import vn.vothien.ghost.domain.response.ResultPaginationDTO;
 import vn.vothien.ghost.service.UserService;
 import vn.vothien.ghost.util.error.IdInvalidException;
+import com.turkraft.springfilter.boot.Filter;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -30,9 +34,9 @@ public class UserController {
 
     // get all user
     @GetMapping("users")
-    public ResponseEntity<List<User>> getAllUser() {
-        List<User> fetchUser = this.userService.fetchAllUser();
-        return ResponseEntity.status(HttpStatus.OK).body(fetchUser);
+    public ResponseEntity<ResultPaginationDTO> getAllUser(@Filter Specification<User> spec,
+            Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.fetchAllUser(spec, pageable));
     }
 
     // get user by id
@@ -61,6 +65,9 @@ public class UserController {
     @PutMapping("/users")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) throws IdInvalidException {
         User ghostUser = this.userService.handleUpdateUser(user);
+        if (ghostUser == null) {
+            throw new IdInvalidException("User với id = " + user.getId() + " không tồn tại");
+        }
         return ResponseEntity.ok(ghostUser);
     }
 }

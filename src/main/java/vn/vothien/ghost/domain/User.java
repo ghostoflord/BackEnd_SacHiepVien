@@ -17,7 +17,7 @@ public class User {
     @Column(name = "id")
     private Long id;
     private String userName;
-    private int password;
+    private String password;
     private String email;
     private String address;
     private String refresh_token;
@@ -43,11 +43,11 @@ public class User {
         this.userName = userName;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(int password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

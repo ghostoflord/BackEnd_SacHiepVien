@@ -44,7 +44,6 @@ public class ProductService {
         List<ResProductDTO> listProduct = pageProduct.getContent()
                 .stream().map(item -> this.convertToResProductDTO(item))
                 .collect(Collectors.toList());
-
         rs.setResult(listProduct);
         return rs;
     }

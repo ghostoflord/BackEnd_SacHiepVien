@@ -1,5 +1,7 @@
 package vn.vothien.ghost.controller;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.turkraft.springfilter.boot.Filter;
+
 import jakarta.validation.Valid;
 import vn.vothien.ghost.domain.Product;
+import vn.vothien.ghost.domain.response.ResultPaginationDTO;
 import vn.vothien.ghost.service.ProductService;
 import vn.vothien.ghost.util.error.IdInvalidException;
 
@@ -25,8 +30,15 @@ public class ProductController {
         this.productService = productService;
     }
 
+    // get list product
+    @GetMapping("products")
+    public ResponseEntity<ResultPaginationDTO> getAllProduct(@Filter Specification<Product> spec,
+            Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.productService.fetchAllProduct(spec, pageable));
+    }
+
     // get Product by id
-    @GetMapping("product/{id}")
+    @GetMapping("products/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") long id, String email) {
         Product fetchProduct = this.productService.fetchProductById(id);
         return ResponseEntity.status(HttpStatus.OK).body(fetchProduct);

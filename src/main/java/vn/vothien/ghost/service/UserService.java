@@ -89,4 +89,8 @@ public class UserService {
         res.setAddress(user.getAddress());
         return res;
     }
+
+    public User handleGetUserByUsername(String username) {
+        return this.userRepository.findByEmail(username);
+    }
 }

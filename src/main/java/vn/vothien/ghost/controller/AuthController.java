@@ -1,5 +1,8 @@
 package vn.vothien.ghost.controller;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,6 +24,9 @@ public class AuthController {
     private final SecurityUtil securityUtil;
     private final UserService userService;
 
+    @Value("${ghost.jwt.refresh-token-validity-in-seconds}")
+    private long refreshTokenExpiration;
+
     public AuthController(AuthenticationManagerBuilder authenticationManagerBuilder, SecurityUtil securityUtil,
             UserService userService) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
@@ -36,9 +42,8 @@ public class AuthController {
         // xác thực người dùng => cần viết hàm loadUserByUsername
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         // create a token
-        String access_token = this.securityUtil.createToken(authentication);
+        String access_token = this.securityUtil.createAccessToken(authentication);
         ResLoginDTO res = new ResLoginDTO();
-
         User currentUserDB = this.userService.handleGetUserByUsername(loginDto.getUsername());
         if (currentUserDB != null) {
             ResLoginDTO.UserLogin userLogin = new ResLoginDTO.UserLogin(
@@ -48,7 +53,24 @@ public class AuthController {
             res.setUser(userLogin);
         }
         res.setAccessToken(access_token);
-        return ResponseEntity.ok().body(res);
+
+        // refresh token
+
+        // create refresh token
+        String refresh_token = this.securityUtil.createRefreshToken(loginDto.getUsername(), res);
+        // update user
+        this.userService.updateUserToken(refresh_token, loginDto.getUsername());
+        // set cookies
+        ResponseCookie resCookies = ResponseCookie
+                .from("refresh_token", refresh_token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(refreshTokenExpiration)
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, resCookies.toString())
+                .body(res);
     }
 
 }

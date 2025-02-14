@@ -90,7 +90,17 @@ public class UserService {
         return res;
     }
 
+    // handle login user with email, and password
     public User handleGetUserByUsername(String username) {
         return this.userRepository.findByEmail(username);
+    }
+
+    // take token when refresh token
+    public void updateUserToken(String token, String email) {
+        User currentUser = this.handleGetUserByUsername(email);
+        if (currentUser != null) {
+            currentUser.setRefresh_token(token);
+            this.userRepository.save(currentUser);
+        }
     }
 }

@@ -23,6 +23,7 @@ public class User {
     private String password;
     private String email;
     private String address;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String refresh_token;
     private Instant created_at;
     private Instant created_by;

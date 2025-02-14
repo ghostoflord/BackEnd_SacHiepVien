@@ -24,7 +24,7 @@ public class User {
     private String email;
     private String address;
     @Column(columnDefinition = "MEDIUMTEXT")
-    private String refresh_token;
+    private String refreshToken;
     private Instant created_at;
     private Instant created_by;
     private Instant update_at;
@@ -75,14 +75,6 @@ public class User {
         this.address = address;
     }
 
-    public String getRefresh_token() {
-        return refresh_token;
-    }
-
-    public void setRefresh_token(String refresh_token) {
-        this.refresh_token = refresh_token;
-    }
-
     public Instant getCreated_at() {
         return created_at;
     }
@@ -115,6 +107,22 @@ public class User {
         this.update_by = update_by;
     }
 
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public String getGender() {
         return gender;
     }
@@ -126,7 +134,7 @@ public class User {
     @Override
     public String toString() {
         return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", email=" + email
-                + ", address=" + address + ", refresh_token=" + refresh_token + ", created_at=" + created_at
+                + ", address=" + address + ", refresh_token=" + refreshToken + ", created_at=" + created_at
                 + ", created_by=" + created_by + ", update_at=" + update_at + ", update_by=" + update_by + ", gender="
                 + gender + "]";
     }

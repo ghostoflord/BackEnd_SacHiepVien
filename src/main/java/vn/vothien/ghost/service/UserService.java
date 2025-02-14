@@ -99,8 +99,12 @@ public class UserService {
     public void updateUserToken(String token, String email) {
         User currentUser = this.handleGetUserByUsername(email);
         if (currentUser != null) {
-            currentUser.setRefresh_token(token);
+            currentUser.setRefreshToken(token);
             this.userRepository.save(currentUser);
         }
+    }
+
+    public User getUserByRefreshTokenAndEmail(String token, String email) {
+        return this.userRepository.findByRefreshTokenAndEmail(token, email);
     }
 }

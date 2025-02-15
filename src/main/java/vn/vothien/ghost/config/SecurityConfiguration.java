@@ -36,11 +36,23 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        String[] whiteList = {
+                "/",
+                "/auth/login", "/auth/refresh", "/storage/**", "/auth/register",
+                "/api/v1/email/**",
+                "/v3/api-docs/**",
+                "/swagger-ui/**",
+                "/swagger-ui.html"
+
+        };
+
         http
                 .csrf(c -> c.disable())
                 .authorizeHttpRequests(
                         authz -> authz
-                                .requestMatchers("/", "/auth/login", "/auth/logout").permitAll()
+                                .requestMatchers(whiteList).permitAll()
+                                // .requestMatchers("/", "/auth/login", "/auth/logout").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
                 .formLogin(f -> f.disable())

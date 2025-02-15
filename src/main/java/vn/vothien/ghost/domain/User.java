@@ -9,8 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import vn.vothien.ghost.domain.Role;
+import vn.vothien.ghost.util.SecurityUtil;
 
 @Entity
 @Table(name = "User")
@@ -25,10 +28,10 @@ public class User {
     private String address;
     @Column(columnDefinition = "MEDIUMTEXT")
     private String refreshToken;
-    private Instant created_at;
-    private Instant created_by;
-    private Instant update_at;
-    private Instant update_by;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private String createdBy;
+    private String updatedBy;
     private String gender;
 
     @ManyToOne
@@ -75,40 +78,40 @@ public class User {
         this.address = address;
     }
 
-    public Instant getCreated_at() {
-        return created_at;
-    }
-
-    public void setCreated_at(Instant created_at) {
-        this.created_at = created_at;
-    }
-
-    public Instant getCreated_by() {
-        return created_by;
-    }
-
-    public void setCreated_by(Instant created_by) {
-        this.created_by = created_by;
-    }
-
-    public Instant getUpdate_at() {
-        return update_at;
-    }
-
-    public void setUpdate_at(Instant update_at) {
-        this.update_at = update_at;
-    }
-
-    public Instant getUpdate_by() {
-        return update_by;
-    }
-
-    public void setUpdate_by(Instant update_by) {
-        this.update_by = update_by;
-    }
-
     public String getRefreshToken() {
         return refreshToken;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     public void setRefreshToken(String refreshToken) {
@@ -131,11 +134,20 @@ public class User {
         this.gender = gender;
     }
 
-    @Override
-    public String toString() {
-        return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", email=" + email
-                + ", address=" + address + ", refresh_token=" + refreshToken + ", created_at=" + created_at
-                + ", created_by=" + created_by + ", update_at=" + update_at + ", update_by=" + update_by + ", gender="
-                + gender + "]";
+    @PrePersist
+    public void handleBeforeCreate() {
+        this.createdBy = SecurityUtil.getCurrentUserLogin().isPresent() == true
+                ? SecurityUtil.getCurrentUserLogin().get()
+                : "";
+        this.createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handleBeforeUpdate() {
+        this.updatedBy = SecurityUtil.getCurrentUserLogin().isPresent() == true
+                ? SecurityUtil.getCurrentUserLogin().get()
+                : "";
+
+        this.updatedAt = Instant.now();
     }
 }

@@ -84,8 +84,6 @@ public class UserService {
         res.setEmail(user.getEmail());
         res.setUserName(user.getUserName());
         res.setGender(user.getGender());
-        res.setUpdate_at(user.getUpdate_at());
-        res.setCreated_at(user.getCreated_at());
         res.setAddress(user.getAddress());
         return res;
     }

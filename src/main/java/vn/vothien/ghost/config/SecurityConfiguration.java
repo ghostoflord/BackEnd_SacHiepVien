@@ -47,8 +47,6 @@ public class SecurityConfiguration {
                 "/v3/api-docs/**",
                 "/swagger-ui/**",
                 "/swagger-ui.html",
-                // "/api/v1/users"
-
         };
 
         http

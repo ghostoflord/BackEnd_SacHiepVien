@@ -20,4 +20,12 @@ public class ResLoginDTO {
         private String email;
         private String name;
     }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserGetAccount {
+        private UserLogin user;
+    }
 }

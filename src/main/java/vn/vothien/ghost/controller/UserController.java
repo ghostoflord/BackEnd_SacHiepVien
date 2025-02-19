@@ -35,11 +35,17 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // get all user
+    // get user with current and pageSize
     @GetMapping("users")
     public ResponseEntity<ResultPaginationDTO> getAllUser(@Filter Specification<User> spec,
             Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(this.userService.fetchAllUser(spec, pageable));
+    }
+
+    // get all user
+    @GetMapping("all/users")
+    public ResponseEntity<List<User>> getAllListUserL() {
+        return ResponseEntity.status(HttpStatus.OK).body(this.userService.fetchAllListUser());
     }
 
     // get user by id

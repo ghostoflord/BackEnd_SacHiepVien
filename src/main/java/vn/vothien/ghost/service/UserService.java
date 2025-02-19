@@ -22,7 +22,13 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    // get all user
+    // take user by id
+    public List<User> fetchAllListUser() {
+        List<User> allUser = this.userRepository.findAll();
+        return allUser;
+    }
+
+    // get user with current and pageSize
     public ResultPaginationDTO fetchAllUser(Specification<User> spec, Pageable pageable) {
         Page<User> pageUser = this.userRepository.findAll(spec, pageable);
         ResultPaginationDTO rs = new ResultPaginationDTO();

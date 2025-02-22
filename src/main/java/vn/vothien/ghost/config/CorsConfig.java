@@ -20,6 +20,7 @@ public class CorsConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allowed methods
         // các phần header được phép gửi lên
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "x-no-retry"));
+        configuration.setExposedHeaders(Arrays.asList("x-auth-token", "Authorization"));
         // có gửi kèm cookies hay không
         configuration.setAllowCredentials(true);
         // thời gian pe-fight request có thể cache

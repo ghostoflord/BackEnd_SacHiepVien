@@ -2,6 +2,7 @@ package vn.vothien.ghost.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import vn.vothien.ghost.domain.User;
 import vn.vothien.ghost.domain.dto.LoginDTO;
+import vn.vothien.ghost.domain.response.ResCreateUserDTO;
 import vn.vothien.ghost.domain.response.ResLoginDTO;
 import vn.vothien.ghost.service.UserService;
 import vn.vothien.ghost.util.SecurityUtil;
@@ -186,5 +188,21 @@ public class AuthController {
                 return ResponseEntity.ok()
                                 .header(HttpHeaders.SET_COOKIE, deleteSpringCookie.toString())
                                 .body(null);
+        }
+
+        @PostMapping("/auth/register")
+        public ResponseEntity<ResCreateUserDTO> register(@Valid @RequestBody User postManUser)
+                        throws IdInvalidException {
+                boolean isEmailExist = this.userService.isEmailExists(postManUser.getEmail());
+                if (isEmailExist) {
+                        throw new IdInvalidException(
+                                        "Email " + postManUser.getEmail() + "đã tồn tại, vui lòng sử dụng email khác.");
+                }
+
+                String hashPassword = this.passwordEncoder.encode(postManUser.getPassword());
+                postManUser.setPassword(hashPassword);
+                User ericUser = this.userService.handleCreateUser(postManUser);
+                return ResponseEntity.status(HttpStatus.CREATED)
+                                .body(this.userService.convertToResCreateUserDTO(ericUser));
         }
 }

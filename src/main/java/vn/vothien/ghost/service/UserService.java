@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import vn.vothien.ghost.domain.User;
+import vn.vothien.ghost.domain.response.ResCreateUserDTO;
 import vn.vothien.ghost.domain.response.ResUserDTO;
 import vn.vothien.ghost.domain.response.ResultPaginationDTO;
 import vn.vothien.ghost.repository.UserRepository;
@@ -110,5 +111,23 @@ public class UserService {
 
     public User getUserByRefreshTokenAndEmail(String token, String email) {
         return this.userRepository.findByRefreshTokenAndEmail(token, email);
+    }
+
+    // check email
+    public boolean isEmailExists(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    //
+    public ResCreateUserDTO convertToResCreateUserDTO(User user) {
+        ResCreateUserDTO res = new ResCreateUserDTO();
+
+        res.setId(user.getId());
+        res.setEmail(user.getEmail());
+        res.setUserName(user.getUserName());
+        res.setCreatedAt(user.getCreatedAt());
+        res.setGender(user.getGender());
+        res.setAddress(user.getAddress());
+        return res;
     }
 }
